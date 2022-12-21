@@ -5,6 +5,16 @@
     align-items: center;
 }
 
+.card-body-icon {
+    position: absolute;
+    z-index: 0;
+    top: -1.25rem;
+    right: -1rem;
+    opacity: 0.4;
+    font-size: 5rem;
+    transform: rotate(15deg);
+}
+
 $custom-file-text: (
     fr: "Parcourir"
 );

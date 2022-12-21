@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout.vue";
 import FullpageLayout from "../layouts/FullpageLayout.vue";
 import LoginView from "../views/auth/LoginView.vue";
 import ResetPasswordView from "../views/auth/ResetPasswordView.vue";
+import HomeView from "@/views/HomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,7 +12,13 @@ const router = createRouter({
       path: "/",
       name: "root",
       component: MainLayout,
-      children: [],
+      children: [
+        {
+          path: "/",
+          name: "home",
+          component: HomeView,
+        },
+      ],
     },
     {
       path: "/auth",

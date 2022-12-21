@@ -1,9 +1,9 @@
 <template>
   <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark mb-4">
-    <a class="navbar-brand ps-3" href="#">
+    <router-link class="navbar-brand ps-3" :to="{ name: 'home' }">
       <i class="fas fa-hands-helping"></i>
       Parrainage
-    </a>
+    </router-link>
 
     <ul class="navbar-nav ms-auto me-3 me-lg-4">
       <li class="nav-item dropdown" v-if="user">
