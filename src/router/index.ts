@@ -17,6 +17,9 @@ const router = createRouter({
           path: "/",
           name: "home",
           component: HomeView,
+          meta: {
+            title: "Accueil",
+          },
         },
       ],
     },
@@ -31,6 +34,7 @@ const router = createRouter({
           component: LoginView,
           meta: {
             requiresGuest: true,
+            title: "Connexion",
           },
         },
         {
@@ -39,6 +43,7 @@ const router = createRouter({
           component: ResetPasswordView,
           meta: {
             requiresGuest: true,
+            title: "Mot de passe oublié",
           },
         },
       ],
@@ -57,6 +62,8 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+
+  document.title = to.meta.title + " - Parrainages";
 });
 
 export default router;

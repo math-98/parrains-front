@@ -45,6 +45,10 @@
 
   <main>
     <div class="container px-4">
+      <h1 class="mt-4" v-if="$route.name != 'home'">
+        {{ $route.meta.title }}
+      </h1>
+
       <router-view></router-view>
     </div>
   </main>
