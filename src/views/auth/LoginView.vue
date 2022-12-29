@@ -114,6 +114,7 @@ export default {
           password: this.password,
         })
         .then(() => {
+          this.$store.dispatch("managers/fetch");
           this.$router.push({ name: "home" });
         })
         .catch((error) => {

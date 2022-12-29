@@ -6,7 +6,12 @@
 export default {
   mounted() {
     this.$store.dispatch("init").then(() => {
-      this.$store.dispatch("fetchUser").catch(() => {});
+      this.$store
+        .dispatch("fetchUser")
+        .then(() => {
+          this.$store.dispatch("managers/fetch");
+        })
+        .catch(() => {});
     });
   },
 };

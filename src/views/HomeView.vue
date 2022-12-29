@@ -64,17 +64,17 @@
           </div>
 
           <h5>Managers</h5>
-          {{ managersCount }}
+          {{ managers.length }}
         </div>
-        <a
+        <router-link
           class="card-footer d-flex align-items-center justify-content-between"
-          href="#"
+          :to="{ name: 'managers' }"
         >
           <span class="small text-white">Plus de détails...</span>
           <div class="small text-white">
             <i class="fas fa-angle-right"></i>
           </div>
-        </a>
+        </router-link>
       </div>
     </div>
     <div
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   data() {
@@ -130,10 +130,12 @@ export default {
       filleulsCount: 0,
       parrainsCount: 0,
       parrainageRatio: 0,
-      managersCount: 0,
     };
   },
   computed: {
+    ...mapGetters({
+      managers: "managers/managers",
+    }),
     ...mapState({
       user: (state) => state.authentication.user,
     }),

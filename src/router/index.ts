@@ -4,6 +4,7 @@ import FullpageLayout from "../layouts/FullpageLayout.vue";
 import LoginView from "../views/auth/LoginView.vue";
 import ResetPasswordView from "../views/auth/ResetPasswordView.vue";
 import HomeView from "@/views/HomeView.vue";
+import ManagerView from "@/views/ManagerView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,15 @@ const router = createRouter({
           component: HomeView,
           meta: {
             title: "Accueil",
+          },
+        },
+        {
+          path: "/managers",
+          name: "managers",
+          component: ManagerView,
+          meta: {
+            requiresAuth: true,
+            title: "Managers",
           },
         },
       ],

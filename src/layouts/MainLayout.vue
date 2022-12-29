@@ -97,6 +97,7 @@ export default {
       const modal = Modal.getInstance(document.getElementById("logoutModal"));
       this.$store.dispatch("logout").then(() => {
         modal.hide();
+        this.$store.commit("managers/set", []);
 
         if (this.$route.meta.requiresAuth) {
           this.$router.push({ name: "login" });
