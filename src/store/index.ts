@@ -49,6 +49,73 @@ const store = createStore({
         },
       },
     },
+    filleuls: {
+      namespaced: true,
+      state: () => ({
+        filleuls: [],
+      }),
+      getters: {
+        filleuls(state) {
+          return state.filleuls
+            .map((filleul: any) => {
+              filleul.created_at = dayjs(filleul.created_at);
+
+              return filleul;
+            })
+            .sort((a: any, b: any) => {
+              let compare = a.lastname.localeCompare(b.lastname);
+              if (compare === 0) {
+                compare = a.firstname.localeCompare(b.firstname);
+              }
+
+              return compare;
+            });
+        },
+      },
+      mutations: {
+        add(state, filleul) {
+          state.filleuls.push(filleul);
+        },
+        edit(state, filleul) {
+          state.filleuls = state.filleuls.map((aFilleul: any) => {
+            if (aFilleul.id == filleul.id) {
+              return filleul;
+            }
+            return aFilleul;
+          });
+        },
+        remove(state, filleulId) {
+          state.filleuls = state.filleuls.filter((parrain: any) => {
+            return parrain.id !== filleulId;
+          });
+        },
+        set(state, filleuls) {
+          state.filleuls = filleuls;
+        },
+      },
+      actions: {
+        async add({ commit }, data) {
+          return axios.post("/filleuls", data).then((response) => {
+            commit("add", response.data);
+          });
+        },
+        async edit({ commit }, data) {
+          return axios.put(`/filleuls/${data.id}`, data).then((response) => {
+            commit("edit", response.data);
+          });
+        },
+        async fetch({ commit }) {
+          return axios.get("/filleuls").then((response) => {
+            commit("set", response.data);
+          });
+        },
+        async remove({ commit }, filleulId) {
+          return axios.delete(`/filleuls/${filleulId}`).then(() => {
+            commit("remove", filleulId);
+          });
+        },
+      },
+    },
     managers: {
       namespaced: true,
       state: () => ({

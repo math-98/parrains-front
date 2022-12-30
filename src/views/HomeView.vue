@@ -15,17 +15,17 @@
           </div>
 
           <h5>Filleuls</h5>
-          {{ filleulsCount }}
+          {{ filleuls.length }}
         </div>
-        <a
+        <router-link
           class="card-footer d-flex align-items-center justify-content-between"
-          href="#"
+          :to="{ name: 'filleuls' }"
         >
           <span class="small text-white">Plus de détails...</span>
           <div class="small text-white">
             <i class="fas fa-angle-right"></i>
           </div>
-        </a>
+        </router-link>
       </div>
     </div>
     <div
@@ -127,12 +127,12 @@ import { mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
-      filleulsCount: 0,
       parrainageRatio: 0,
     };
   },
   computed: {
     ...mapGetters({
+      filleuls: "filleuls/filleuls",
       managers: "managers/managers",
       parrains: "parrains/parrains",
     }),

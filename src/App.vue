@@ -14,6 +14,7 @@ export default {
         .catch(() => {});
     });
     this.$store.dispatch("parrains/fetch");
+    this.$store.dispatch("filleuls/fetch");
   },
 };
 </script>

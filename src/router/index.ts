@@ -6,6 +6,7 @@ import ResetPasswordView from "../views/auth/ResetPasswordView.vue";
 import HomeView from "@/views/HomeView.vue";
 import ManagerView from "@/views/ManagerView.vue";
 import ParrainsView from "@/views/ParrainsView.vue";
+import FilleulView from "@/views/FilleulView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,14 @@ const router = createRouter({
           component: HomeView,
           meta: {
             title: "Accueil",
+          },
+        },
+        {
+          path: "/filleuls",
+          name: "filleuls",
+          component: FilleulView,
+          meta: {
+            title: "Filleuls",
           },
         },
         {
