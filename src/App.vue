@@ -13,6 +13,7 @@ export default {
         })
         .catch(() => {});
     });
+    this.$store.dispatch("parrains/fetch");
   },
 };
 </script>

@@ -107,6 +107,73 @@ const store = createStore({
         },
       },
     },
+    parrains: {
+      namespaced: true,
+      state: () => ({
+        parrains: [],
+      }),
+      getters: {
+        parrains(state) {
+          return state.parrains
+            .map((parrain: any) => {
+              parrain.created_at = dayjs(parrain.created_at);
+
+              return parrain;
+            })
+            .sort((a: any, b: any) => {
+              let compare = a.lastname.localeCompare(b.lastname);
+              if (compare === 0) {
+                compare = a.firstname.localeCompare(b.firstname);
+              }
+
+              return compare;
+            });
+        },
+      },
+      mutations: {
+        add(state, parrain) {
+          state.parrains.push(parrain);
+        },
+        edit(state, parrain) {
+          state.parrains = state.parrains.map((aParrain: any) => {
+            if (aParrain.id == parrain.id) {
+              return parrain;
+            }
+            return aParrain;
+          });
+        },
+        remove(state, parrainId) {
+          state.parrains = state.parrains.filter((parrain: any) => {
+            return parrain.id !== parrainId;
+          });
+        },
+        set(state, parrains) {
+          state.parrains = parrains;
+        },
+      },
+      actions: {
+        async add({ commit }, data) {
+          return axios.post("/parrains", data).then((response) => {
+            commit("add", response.data);
+          });
+        },
+        async edit({ commit }, data) {
+          return axios.put(`/parrains/${data.id}`, data).then((response) => {
+            commit("edit", response.data);
+          });
+        },
+        async fetch({ commit }) {
+          return axios.get("/parrains").then((response) => {
+            commit("set", response.data);
+          });
+        },
+        async remove({ commit }, parrainId) {
+          return axios.delete(`/parrains/${parrainId}`).then(() => {
+            commit("remove", parrainId);
+          });
+        },
+      },
+    },
   },
 });
 
