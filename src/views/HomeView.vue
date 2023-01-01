@@ -107,15 +107,15 @@
             </div>
           </div>
         </div>
-        <a
+        <router-link
           class="card-footer d-flex align-items-center justify-content-between"
-          href="#"
+          :to="{ name: 'parrainages' }"
         >
           <span class="small text-white">Plus de détails... </span>
           <div class="small text-white">
             <i class="fas fa-angle-right"></i>
           </div>
-        </a>
+        </router-link>
       </div>
     </div>
   </div>
@@ -125,12 +125,21 @@
 import { mapGetters, mapState } from "vuex";
 
 export default {
-  data() {
-    return {
-      parrainageRatio: 0,
-    };
-  },
   computed: {
+    parrainageRatio() {
+      let total = this.filleuls.filter((filleul) => {
+        return !filleul.absent || !!filleul.parrain_id;
+      }).length;
+      if (total === 0) {
+        return 0;
+      }
+
+      let value = this.filleuls.filter((filleul) => {
+        return !!filleul.parrain_id;
+      }).length;
+
+      return Math.round((value / total) * 100);
+    },
     ...mapGetters({
       filleuls: "filleuls/filleuls",
       managers: "managers/managers",

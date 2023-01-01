@@ -7,6 +7,8 @@ import HomeView from "@/views/HomeView.vue";
 import ManagerView from "@/views/ManagerView.vue";
 import ParrainsView from "@/views/ParrainsView.vue";
 import FilleulView from "@/views/FilleulView.vue";
+import ParrainagesView from "@/views/parrainages/ParrainagesView.vue";
+import AssociationView from "@/views/parrainages/AssociationView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,11 +44,35 @@ const router = createRouter({
           },
         },
         {
+          path: "/parrainages",
+          name: "parrainages",
+          component: ParrainagesView,
+          meta: {
+            title: "Parrainages",
+          },
+        },
+        {
           path: "/parrains",
           name: "parrains",
           component: ParrainsView,
           meta: {
             title: "Parrains",
+          },
+        },
+      ],
+    },
+    {
+      path: "/parrainages/association",
+      name: "association-root",
+      component: FullpageLayout,
+      children: [
+        {
+          path: "/parrainages/association",
+          name: "association",
+          component: AssociationView,
+          meta: {
+            requiresAuth: true,
+            title: "Association",
           },
         },
       ],
