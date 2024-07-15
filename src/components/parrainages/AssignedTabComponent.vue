@@ -13,7 +13,9 @@
           {{ parrainage.filleul.firstname }} {{ parrainage.filleul.lastname }}
         </td>
         <td>
-          {{ parrainage.parrain.firstname }} {{ parrainage.parrain.lastname }}
+          <template v-if="parrainage.parrain">
+            {{ parrainage.parrain.firstname }} {{ parrainage.parrain.lastname }}
+          </template>
         </td>
         <td class="d-grid" v-if="user">
           <button
