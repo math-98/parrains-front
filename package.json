@@ -1,5 +1,6 @@
 {
   "name": "parrains-front",
+  "type": "module",
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
@@ -14,24 +15,24 @@
     "axios": "^1.1.3",
     "bootstrap": "^5.2.2",
     "dayjs": "^1.11.7",
-    "sass": "^1.55.0",
+    "sass": "1.77.6",
     "vue": "^3.2.38",
     "vue-router": "^4.1.5",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
-    "@types/node": "^18.0.0",
-    "@vitejs/plugin-vue": "^4.0.0",
-    "@vue/eslint-config-prettier": "^7.0.0",
-    "@vue/eslint-config-typescript": "^11.0.0",
+    "@types/node": "^22.5.1",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/tsconfig": "^0.1.3",
     "eslint": "^8.22.0",
     "eslint-plugin-vue": "^9.3.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.7.1",
-    "typescript": "~4.9.0",
-    "vite": "^4.0.0",
-    "vue-tsc": "^1.0.0"
+    "prettier": "^3.3.3",
+    "typescript": "~5.5.4",
+    "vite": "^5.4.2",
+    "vue-tsc": "^2.1.2"
   }
 }
