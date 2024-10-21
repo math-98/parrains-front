@@ -30,16 +30,18 @@
           </div>
         </div>
         <div class="mb-2 text-center">sera parrainé(e) par</div>
-        <div class="row" v-if="showParrain">
-          <div class="col-2 d-grid">
-            <button class="btn btn-danger" @click="parrainAbsent">
-              <i class="fas fa-user-times"></i>
-            </button>
+        <Transition name="parrain-fade">
+          <div class="row" v-if="showParrain">
+            <div class="col-2 d-grid">
+              <button class="btn btn-danger" @click="parrainAbsent">
+                <i class="fas fa-user-times"></i>
+              </button>
+            </div>
+            <div class="col-10 d-flex align-items-center">
+              {{ parrain.firstname }} {{ parrain.lastname }}
+            </div>
           </div>
-          <div class="col-10 d-flex align-items-center">
-            {{ parrain.firstname }} {{ parrain.lastname }}
-          </div>
-        </div>
+        </Transition>
 
         <div class="d-grid mt-3">
           <button
@@ -164,6 +166,8 @@ export default {
         });
     },
     parrainAbsent() {
+      this.showParrain = false;
+
       this.$store
         .dispatch("parrains/edit", {
           id: this.parrain.id,
@@ -171,6 +175,7 @@ export default {
         })
         .then(() => {
           this.refreshParrains();
+          this.showParrain = true;
         });
     },
     refreshParrains() {
@@ -190,7 +195,7 @@ export default {
       });
 
       const randomIndex = Math.floor(
-        Math.random() * this.parrainsAvailable.length
+        Math.random() * this.parrainsAvailable.length,
       );
       this.parrain = this.parrainsAvailable[randomIndex];
     },
@@ -198,4 +203,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.parrain-fade-enter-active {
+  transition: opacity 0.5s ease;
+}
+
+.parrain-fade-enter-from {
+  opacity: 0;
+}
+</style>
