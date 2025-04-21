@@ -10,9 +10,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="importParrainsModalLabel">
-            Importer des parrains
-          </h5>
+          <h5 class="modal-title" id="importParrainsModalLabel">Importer des parrains</h5>
           <button
             type="button"
             class="btn-close"
@@ -22,9 +20,7 @@
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label for="importParrainsFile" class="form-label">
-              Fichier CSV
-            </label>
+            <label for="importParrainsFile" class="form-label"> Fichier CSV </label>
             <input
               class="form-control"
               type="file"
@@ -32,9 +28,7 @@
               @change="load($event)"
             />
             <div class="form-text">
-              <a href="/csv/import-template.csv" target="_blank">
-                Télécharger le modèle
-              </a>
+              <a href="/csv/import-template.csv" target="_blank"> Télécharger le modèle </a>
             </div>
           </div>
           <hr v-if="parrains.length" />
@@ -56,19 +50,8 @@
         </div>
 
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Fermer
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            v-if="parrains.length"
-            @click="submit"
-          >
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-primary" v-if="parrains.length" @click="submit">
             Importer
           </button>
         </div>
@@ -77,43 +60,45 @@
   </div>
 </template>
 
-<script>
-import { Modal } from "bootstrap";
+<script lang="ts">
+import { Modal } from 'bootstrap'
+import { useParrainsStore } from '@/store/parrains.js'
 
 export default {
   methods: {
-    load(event) {
-      event.target.files[0].text().then((text) => {
-        const lines = text.trim().split("\n");
-        lines.shift();
+    load(event: any) {
+      event.target.files[0].text().then((text: any) => {
+        const lines = text.trim().split('\n')
+        lines.shift()
 
-        this.parrains = lines.map((line) => {
-          const [lastname, firstname] = line.split(";");
+        this.parrains = lines.map((line: any) => {
+          const [lastname, firstname] = line.split(';')
 
           return {
             lastname,
             firstname,
-          };
-        });
-      });
+          }
+        })
+      })
     },
     submit() {
-      const promises = [];
-      this.parrains.forEach((parrain) => {
-        promises.push(this.$store.dispatch("parrains/add", parrain));
-      });
+      const promises: any[] = []
+      this.parrains.forEach((parrain: any) => {
+        promises.push(useParrainsStore().add(parrain.firstname, parrain.lastname))
+      })
 
       Promise.all(promises).then(() => {
-        const modal = Modal.getOrCreateInstance(this.$refs.modal);
-        modal.hide();
-      });
+        let modalElm: any = this.$refs.modal
+        const modal = Modal.getOrCreateInstance(modalElm)
+        modal.hide()
+      })
     },
   },
   data() {
     return {
-      parrains: [],
-    };
+      parrains: [] as any[],
+    }
   },
-  name: "ParrainsImportComponent",
-};
+  name: 'ParrainsImportComponent',
+}
 </script>

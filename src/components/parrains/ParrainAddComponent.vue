@@ -10,9 +10,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addParrainModalLabel">
-            Ajouter un parrain
-          </h5>
+          <h5 class="modal-title" id="addParrainModalLabel">Ajouter un parrain</h5>
           <button
             type="button"
             class="btn-close"
@@ -34,7 +32,9 @@
               v-model="lastname"
             />
             <div class="invalid-feedback" v-if="errors.lastname">
-              <div v-for="error in errors.lastname" :key="error">{{ error }}</div>
+              <div v-for="error in errors.lastname" :key="error">
+                {{ error }}
+              </div>
             </div>
           </div>
           <div class="mb-3">
@@ -57,19 +57,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Fermer
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            :disabled="!isValid"
-            @click="submit"
-          >
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-primary" :disabled="!isValid" @click="submit">
             Ajouter
           </button>
         </div>
@@ -78,38 +67,37 @@
   </div>
 </template>
 
-<script>
-import { Modal } from "bootstrap";
+<script lang="ts">
+import { Modal } from 'bootstrap'
+import { useParrainsStore } from '@/store/parrains.js'
 
 export default {
   methods: {
     submit() {
-      this.$store
-        .dispatch("parrains/add", {
-          lastname: this.lastname,
-          firstname: this.firstname,
-        })
+      useParrainsStore()
+        .add(this.firstname, this.lastname)
         .then(() => {
-          const modal = Modal.getOrCreateInstance(this.$refs.modal);
-          modal.hide();
+          let modalElm: any = this.$refs.modal
+          const modal = Modal.getOrCreateInstance(modalElm)
+          modal.hide()
         })
-        .catch((error) => {
-          this.errors = error.response.data.errors;
-        });
+        .catch((error: any) => {
+          this.errors = error.response.data.errors
+        })
     },
   },
   computed: {
     isValid() {
-      return this.lastname && this.firstname;
+      return this.lastname && this.firstname
     },
   },
   data() {
     return {
-      lastname: "",
-      firstname: "",
-      errors: [],
-    };
+      lastname: '',
+      firstname: '',
+      errors: [] as any,
+    }
   },
-  name: "ParrainAddComponent",
-};
+  name: 'ParrainAddComponent',
+}
 </script>

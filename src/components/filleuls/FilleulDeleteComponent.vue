@@ -25,56 +25,48 @@
             {{ error }}
           </div>
 
-          Êtes-vous sûr de vouloir supprimer le filleul "{{
-            filleul.firstname
-          }}
+          Êtes-vous sûr de vouloir supprimer le filleul "{{ filleul.firstname }}
           {{ filleul.lastname }}" ?
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Fermer
-          </button>
-          <button type="button" class="btn btn-danger" @click="submit">
-            Supprimer
-          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-danger" @click="submit">Supprimer</button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { Modal } from "bootstrap";
+<script lang="ts">
+import { Modal } from 'bootstrap'
+import { useFilleulsStore } from '@/store/fieuls.js'
 
 export default {
   methods: {
     submit() {
-      const modal = Modal.getOrCreateInstance(this.$refs.modal);
-      this.$store
-        .dispatch("filleuls/remove", this.filleul.id)
+      let modalElm: any = this.$refs.modal
+      const modal = Modal.getOrCreateInstance(modalElm)
+      useFilleulsStore()
+        .remove(this.filleul.id)
         .then(() => {
-          modal.hide();
+          modal.hide()
         })
-        .catch((error) => {
-          this.error = error.response.data.message;
-        });
+        .catch((error: any) => {
+          this.error = error.response.data.message
+        })
     },
   },
   data() {
     return {
-      error: "",
-    };
+      error: '',
+    }
   },
-  name: "FilleulDeleteComponent",
+  name: 'FilleulDeleteComponent',
   props: {
     filleul: {
       type: Object,
       required: true,
     },
   },
-};
+}
 </script>

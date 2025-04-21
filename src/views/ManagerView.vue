@@ -1,10 +1,6 @@
 <template>
   <div class="d-grid">
-    <button
-      class="btn btn-primary mb-3"
-      data-bs-toggle="modal"
-      data-bs-target="#addManagerModal"
-    >
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addManagerModal">
       <i class="fas fa-user-plus"></i>
       Ajouter un manager
     </button>
@@ -24,7 +20,7 @@
       <tr v-for="manager of managers" :key="manager.id">
         <td>{{ manager.name }}</td>
         <td>{{ manager.email }}</td>
-        <td>{{ manager.created_at.format("DD/MM/YYYY HH:mm:ss") }}</td>
+        <td>{{ manager.created_at.format('DD/MM/YYYY HH:mm:ss') }}</td>
         <td class="d-grid">
           <div class="btn-group" role="group">
             <button
@@ -56,11 +52,13 @@
   </table>
 </template>
 
-<script>
-import { mapGetters, mapState } from "vuex";
-import ManagerAddComponent from "@/components/managers/ManagerAddComponent.vue";
-import ManagerDeleteComponent from "@/components/managers/ManagerDeleteComponent.vue";
-import ManagerEditComponent from "@/components/managers/ManagerEditComponent.vue";
+<script lang="ts">
+import { mapState } from 'pinia'
+import ManagerAddComponent from '@/components/managers/ManagerAddComponent.vue'
+import ManagerDeleteComponent from '@/components/managers/ManagerDeleteComponent.vue'
+import ManagerEditComponent from '@/components/managers/ManagerEditComponent.vue'
+import { useAuthStore } from '@/store/auth.ts'
+import { useManagersStore } from '@/store/managers.ts'
 
 export default {
   components: {
@@ -69,12 +67,12 @@ export default {
     ManagerEditComponent,
   },
   computed: {
-    ...mapGetters({
-      managers: "managers/managers",
+    ...mapState(useAuthStore, {
+      user: (state) => state.user as any,
     }),
-    ...mapState({
-      user: (state) => state.authentication.user,
+    ...mapState(useManagersStore, {
+      managers: (state) => state.managers,
     }),
   },
-};
+}
 </script>

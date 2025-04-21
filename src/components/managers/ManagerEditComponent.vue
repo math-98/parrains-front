@@ -68,10 +68,7 @@
                   Modifier le mot de passe
                 </button>
               </h2>
-              <div
-                :id="'editPasswordCollapse-' + manager.id"
-                class="accordion-collapse collapse"
-              >
+              <div :id="'editPasswordCollapse-' + manager.id" class="accordion-collapse collapse">
                 <div class="accordion-body">
                   <div class="row">
                     <div class="col-6">
@@ -96,9 +93,7 @@
                         type="password"
                         v-bind:class="{
                           'form-control': true,
-                          'is-valid':
-                            passwordConfirmation &&
-                            password === passwordConfirmation,
+                          'is-valid': passwordConfirmation && password === passwordConfirmation,
                         }"
                         class="form-control"
                         placeholder="Confirmation du mot de passe"
@@ -119,19 +114,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Fermer
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            :disabled="!isValid"
-            @click="submit"
-          >
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-primary" :disabled="!isValid" @click="submit">
             Envoyer
           </button>
         </div>
@@ -140,67 +124,66 @@
   </div>
 </template>
 
-<script>
-import PasswordValidationComponent from "@/components/PasswordValidationComponent.vue";
-import { Modal } from "bootstrap";
+<script lang="ts">
+import { Modal } from 'bootstrap'
+import PasswordValidationComponent from '@/components/PasswordValidationComponent.vue'
+import { useManagersStore } from '@/store/managers.js'
 
 export default {
   components: { PasswordValidationComponent },
   mounted() {
-    this.name = this.manager.name;
-    this.email = this.manager.email;
+    this.name = this.manager.name
+    this.email = this.manager.email
   },
   methods: {
     submit() {
-      let data = {
+      let data: any = {
         id: this.manager.id,
         name: this.name,
         email: this.email,
-      };
+      }
       if (this.password) {
-        data.password = this.password;
+        data.password = this.password
       }
 
-      this.$store
-        .dispatch("managers/edit", data)
+      useManagersStore()
+        .edit(data)
         .then(() => {
-          const modal = Modal.getOrCreateInstance(this.$refs.modal);
-          modal.hide();
+          let modalElm: any = this.$refs.modal
+          const modal = Modal.getOrCreateInstance(modalElm)
+          modal.hide()
         })
-        .catch((error) => {
-          this.errors = error.response.data.errors;
-        });
+        .catch((error: any) => {
+          this.errors = error.response.data.errors
+        })
     },
   },
   computed: {
     isValid() {
-      let valid = this.name && this.email;
+      let valid = this.name.length > 0 && this.email.length > 0
       if (this.password) {
-        valid =
-          valid &&
-          this.passwordValid &&
-          this.password === this.passwordConfirmation;
+        valid = valid && this.passwordValid && this.password === this.passwordConfirmation
       }
 
-      return valid;
+      return valid
     },
   },
   data() {
     return {
-      name: "",
-      email: "",
-      password: "",
-      passwordConfirmation: "",
+      name: '',
+      email: '',
+      password: '',
+      passwordConfirmation: '',
       passwordValid: false,
-      errors: [],
-    };
+      errors: [] as any,
+    }
   },
-  name: "ManagerEditComponent",
+  name: 'ManagerEditComponent',
   props: {
     manager: {
       type: Object,
       required: true,
     },
   },
-};
+}
 </script>

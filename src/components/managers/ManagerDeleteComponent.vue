@@ -28,50 +28,44 @@
           Êtes-vous sûr de vouloir supprimer le manager "{{ manager.name }}" ?
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Fermer
-          </button>
-          <button type="button" class="btn btn-danger" @click="submit">
-            Supprimer
-          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-danger" @click="submit">Supprimer</button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { Modal } from "bootstrap";
+<script lang="ts">
+import { Modal } from 'bootstrap'
+import { useManagersStore } from '@/store/managers.js'
 
 export default {
   methods: {
     submit() {
-      const modal = Modal.getOrCreateInstance(this.$refs.modal);
-      this.$store
-        .dispatch("managers/remove", this.manager.id)
+      let modalElm: any = this.$refs.modal
+      const modal = Modal.getOrCreateInstance(modalElm)
+      useManagersStore()
+        .remove(this.manager.id)
         .then(() => {
-          modal.hide();
+          modal.hide()
         })
-        .catch((error) => {
-          this.error = error.response.data.message;
-        });
+        .catch((error: any) => {
+          this.error = error.response.data.message
+        })
     },
   },
   data() {
     return {
-      error: "",
-    };
+      error: '',
+    }
   },
-  name: "ManagerDeleteComponent",
+  name: 'ManagerDeleteComponent',
   props: {
     manager: {
       type: Object,
       required: true,
     },
   },
-};
+}
 </script>

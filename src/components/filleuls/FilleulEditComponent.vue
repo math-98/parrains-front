@@ -64,25 +64,12 @@
               :id="'absentCheck-' + filleul.id"
               v-model="absent"
             />
-            <label class="form-check-label" :for="'absentCheck-' + filleul.id">
-              Absent
-            </label>
+            <label class="form-check-label" :for="'absentCheck-' + filleul.id"> Absent </label>
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Fermer
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            :disabled="!isValid"
-            @click="submit"
-          >
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-primary" :disabled="!isValid" @click="submit">
             Envoyer
           </button>
         </div>
@@ -91,14 +78,15 @@
   </div>
 </template>
 
-<script>
-import { Modal } from "bootstrap";
+<script lang="ts">
+import { Modal } from 'bootstrap'
+import { useFilleulsStore } from '@/store/fieuls.js'
 
 export default {
   mounted() {
-    this.lastname = this.filleul.lastname;
-    this.firstname = this.filleul.firstname;
-    this.absent = this.filleul.absent;
+    this.lastname = this.filleul.lastname
+    this.firstname = this.filleul.firstname
+    this.absent = this.filleul.absent
   },
   methods: {
     submit() {
@@ -107,38 +95,39 @@ export default {
         lastname: this.lastname,
         firstname: this.firstname,
         absent: this.absent,
-      };
+      }
 
-      this.$store
-        .dispatch("filleuls/edit", data)
+      useFilleulsStore()
+        .edit(data)
         .then(() => {
-          const modal = Modal.getOrCreateInstance(this.$refs.modal);
-          modal.hide();
+          let modalElm: any = this.$refs.modal
+          const modal = Modal.getOrCreateInstance(modalElm)
+          modal.hide()
         })
-        .catch((error) => {
-          this.errors = error.response.data.errors;
-        });
+        .catch((error: any) => {
+          this.errors = error.response.data.errors
+        })
     },
   },
   computed: {
     isValid() {
-      return this.lastname && this.firstname;
+      return this.lastname && this.firstname
     },
   },
   data() {
     return {
-      lastname: "",
-      firstname: "",
+      lastname: '',
+      firstname: '',
       absent: false,
-      errors: [],
-    };
+      errors: [] as any,
+    }
   },
-  name: "FilleulEditComponent",
+  name: 'FilleulEditComponent',
   props: {
     filleul: {
       type: Object,
       required: true,
     },
   },
-};
+}
 </script>

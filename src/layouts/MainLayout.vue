@@ -18,16 +18,9 @@
           <i class="fas fa-user fa-fw"></i>
           {{ user.name }}
         </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdown"
-        >
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
           <li>
-            <button
-              class="dropdown-item"
-              data-bs-toggle="modal"
-              data-bs-target="#logoutModal"
-            >
+            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
               <i class="fas fa-sign-out-alt"></i>
               Déconnexion
             </button>
@@ -73,13 +66,10 @@
           ></button>
         </div>
         <div class="modal-body">
-          Sélectionnez "Déconnexion" ci-dessous si vous être prêt à terminer
-          votre session actuelle.
+          Sélectionnez "Déconnexion" ci-dessous si vous être prêt à terminer votre session actuelle.
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">
-            Annuler
-          </button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
           <button class="btn btn-danger" @click="logout">Déconnexion</button>
         </div>
       </div>
@@ -87,28 +77,38 @@
   </div>
 </template>
 
-<script>
-import { mapState } from "vuex";
-import { Modal } from "bootstrap";
+<script lang="ts">
+import { Modal } from 'bootstrap'
+import { mapState } from 'pinia'
+import { useAuthStore } from '@/store/auth.ts'
+import { useManagersStore } from '@/store/managers.ts'
 
 export default {
   methods: {
     logout() {
-      const modal = Modal.getInstance(document.getElementById("logoutModal"));
-      this.$store.dispatch("logout").then(() => {
-        modal.hide();
-        this.$store.commit("managers/set", []);
+      let modalElm: any = document.getElementById('logoutModal')
+      const modal = Modal.getInstance(modalElm)
+      if (!modal) {
+        return
+      }
+      useAuthStore()
+        .logout()
+        .then(() => {
+          modal.hide()
+          useManagersStore().$patch({
+            managers: [],
+          })
 
-        if (this.$route.meta.requiresAuth) {
-          this.$router.push({ name: "login" });
-        }
-      });
+          if (this.$route.meta.requiresAuth) {
+            this.$router.push({ name: 'login' })
+          }
+        })
     },
   },
   computed: {
-    ...mapState({
-      user: (state) => state.authentication.user,
+    ...mapState(useAuthStore, {
+      user: (state) => state.user as any,
     }),
   },
-};
+}
 </script>

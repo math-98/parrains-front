@@ -3,16 +3,12 @@
     <div class="card-header">Association</div>
     <div class="card-body">
       <div class="text-center mb-3" v-if="loading">
-        <div
-          class="spinner-border"
-          role="status"
-          style="width: 3rem; height: 3rem"
-        >
+        <div class="spinner-border" role="status" style="width: 3rem; height: 3rem">
           <span class="visually-hidden">Chargement...</span>
         </div>
       </div>
 
-      <div v-else-if="!this.filleulsUnassigned.length">
+      <div v-else-if="!filleulsUnassigned.length">
         <h3>C'est dans la boite !</h3>
         Nous vous souhaitons à tous une bonne année
         <i class="far fa-face-smile"></i>
@@ -44,13 +40,7 @@
         </Transition>
 
         <div class="d-grid mt-3">
-          <button
-            class="btn btn-primary"
-            :disabled="loading"
-            @click="nextClick"
-          >
-            >>>
-          </button>
+          <button class="btn btn-primary" :disabled="loading" @click="nextClick">>>></button>
         </div>
         <hr />
 
@@ -63,11 +53,7 @@
               aria-valuemin="0"
               :aria-valuenow="parrainsAvailable.length"
               :aria-valuemax="parrains.length"
-              :style="
-                'width: ' +
-                (parrainsAvailable.length * 100) / parrains.length +
-                '%'
-              "
+              :style="'width: ' + (parrainsAvailable.length * 100) / parrains.length + '%'"
             ></div>
           </div>
         </div>
@@ -83,8 +69,7 @@
               :aria-valuemax="filleuls.length"
               :style="
                 'width: ' +
-                ((filleuls.length - filleulsUnassigned.length) * 100) /
-                  filleuls.length +
+                ((filleuls.length - filleulsUnassigned.length) * 100) / filleuls.length +
                 '%'
               "
             ></div>
@@ -101,106 +86,104 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { useParrainsStore } from '@/store/parrains.ts'
+import { useFilleulsStore } from '@/store/fieuls.ts'
+
 export default {
   mounted() {
-    Promise.all([
-      this.$store.dispatch("filleuls/fetch"),
-      this.$store.dispatch("parrains/fetch"),
-    ]).then(() => {
-      this.filleul = this.filleulsUnassigned[0];
-      this.refreshParrains();
-      this.loading = false;
-    });
+    Promise.all([useFilleulsStore().fetch(), useParrainsStore().fetch()]).then(() => {
+      this.filleul = this.filleulsUnassigned[0]
+      this.refreshParrains()
+      this.loading = false
+    })
   },
   computed: {
     filleuls() {
-      return this.$store.getters["filleuls/filleuls"].filter((filleul) => {
-        return !filleul.absent;
-      });
+      return useFilleulsStore().filleuls.filter((filleul: any) => {
+        return !filleul.absent
+      })
     },
     filleulsUnassigned: function () {
-      return this.filleuls.filter((filleul) => {
-        return !filleul.parrain_id;
-      });
+      return this.filleuls.filter((filleul: any) => {
+        return !filleul.parrain_id
+      })
     },
     parrains() {
-      return this.$store.getters["parrains/parrains"].filter((parrain) => {
-        return !parrain.absent;
-      });
+      return useParrainsStore().parrains.filter((parrain: any) => {
+        return !parrain.absent
+      })
     },
   },
   data() {
     return {
-      filleul: undefined,
+      filleul: undefined as any,
       loading: true,
-      parrain: undefined,
+      parrain: undefined as any,
       parrainsAvailable: [],
       showParrain: false,
-    };
+    }
   },
   methods: {
     nextClick() {
       if (this.showParrain) {
-        this.$store
-          .dispatch("filleuls/edit", {
+        useFilleulsStore()
+          .edit({
             id: this.filleul.id,
             parrain_id: this.parrain.id,
           })
           .then(() => {
-            this.refreshParrains();
-            this.filleul = this.filleulsUnassigned[0];
-          });
+            this.refreshParrains()
+            this.filleul = this.filleulsUnassigned[0]
+          })
       }
 
-      this.showParrain = !this.showParrain;
+      this.showParrain = !this.showParrain
     },
     filleulAbsent() {
-      this.$store
-        .dispatch("filleuls/edit", {
+      useFilleulsStore()
+        .edit({
           id: this.filleul.id,
           absent: true,
         })
         .then(() => {
-          this.filleul = this.filleulsUnassigned[0];
-        });
+          this.filleul = this.filleulsUnassigned[0]
+        })
     },
     parrainAbsent() {
-      this.showParrain = false;
+      this.showParrain = false
 
-      this.$store
-        .dispatch("parrains/edit", {
+      useParrainsStore()
+        .edit({
           id: this.parrain.id,
           absent: true,
         })
         .then(() => {
-          this.refreshParrains();
-          this.showParrain = true;
-        });
+          this.refreshParrains()
+          this.showParrain = true
+        })
     },
     refreshParrains() {
-      let min = Infinity;
-      const parrainages = {};
-      this.parrains.forEach((parrain) => {
-        const filleulsCount = this.filleuls.filter((filleul) => {
-          return filleul.parrain_id === parrain.id;
-        }).length;
-        min = Math.min(min, filleulsCount);
+      let min = Infinity
+      const parrainages: any = {}
+      this.parrains.forEach((parrain: any) => {
+        const filleulsCount = this.filleuls.filter((filleul: any) => {
+          return filleul.parrain_id === parrain.id
+        }).length
+        min = Math.min(min, filleulsCount)
 
-        parrainages[parrain.id] = filleulsCount;
-      });
+        parrainages[parrain.id] = filleulsCount
+      })
 
-      this.parrainsAvailable = this.parrains.filter((parrain) => {
-        return parrainages[parrain.id] === min && !parrain.absent;
-      });
+      this.parrainsAvailable = this.parrains.filter((parrain: any) => {
+        return parrainages[parrain.id] === min && !parrain.absent
+      })
 
-      const randomIndex = Math.floor(
-        Math.random() * this.parrainsAvailable.length,
-      );
-      this.parrain = this.parrainsAvailable[randomIndex];
+      const randomIndex = Math.floor(Math.random() * this.parrainsAvailable.length)
+      this.parrain = this.parrainsAvailable[randomIndex]
     },
   },
-};
+}
 </script>
 
 <style scoped>

@@ -80,12 +80,14 @@
   </table>
 </template>
 
-<script>
-import { mapGetters, mapState } from "vuex";
+<script lang="ts">
+import { mapState } from "pinia";
 import FilleulAddComponent from "@/components/filleuls/FilleulAddComponent.vue";
 import FilleulDeleteComponent from "@/components/filleuls/FilleulDeleteComponent.vue";
 import FilleulEditComponent from "@/components/filleuls/FilleulEditComponent.vue";
 import FilleulsImportComponent from "@/components/filleuls/FilleulsImportComponent.vue";
+import { useAuthStore } from "@/store/auth.js";
+import { useFilleulsStore } from "@/store/fieuls.js";
 
 export default {
   components: {
@@ -95,11 +97,11 @@ export default {
     FilleulsImportComponent,
   },
   computed: {
-    ...mapGetters({
-      filleuls: "filleuls/filleuls",
+    ...mapState(useAuthStore, {
+      user: (state) => state.user,
     }),
-    ...mapState({
-      user: (state) => state.authentication.user,
+    ...mapState(useFilleulsStore, {
+      filleuls: (state) => state.filleuls,
     }),
   },
 };

@@ -18,7 +18,7 @@
               'fa-times': filleul.absent,
             }"
           ></i>
-          {{ filleul.absent ? "Absent" : "Présent" }}
+          {{ filleul.absent ? 'Absent' : 'Présent' }}
         </td>
         <td class="d-grid" v-if="user">
           <button
@@ -36,24 +36,26 @@
   </table>
 </template>
 
-<script>
-import { mapState } from "vuex";
-import AssignComponent from "@/components/parrainages/AssignComponent.vue";
+<script lang="ts">
+import { mapState } from 'pinia'
+import AssignComponent from '@/components/parrainages/AssignComponent.vue'
+import { useAuthStore } from '@/store/auth.js'
+import { useFilleulsStore } from '@/store/fieuls.js'
 
 export default {
   components: { AssignComponent },
   computed: {
     filleuls() {
-      return this.$store.getters["filleuls/filleuls"].filter((filleul) => {
-        return !filleul.parrain_id;
-      });
+      return useFilleulsStore().filleuls.filter((filleul: any) => {
+        return !filleul.parrain_id
+      })
     },
-    ...mapState({
-      user: (state) => state.authentication.user,
+    ...mapState(useAuthStore, {
+      user: (state) => state.user,
     }),
   },
-  name: "UnassignedTabComponent",
-};
+  name: 'UnassignedTabComponent',
+}
 </script>
 
 <style scoped></style>

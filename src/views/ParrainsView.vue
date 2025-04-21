@@ -80,12 +80,14 @@
   </table>
 </template>
 
-<script>
-import { mapGetters, mapState } from "vuex";
+<script lang="ts">
+import { mapState } from "pinia";
 import ParrainAddComponent from "@/components/parrains/ParrainAddComponent.vue";
 import ParrainDeleteComponent from "@/components/parrains/ParrainDeleteComponent.vue";
 import ParrainEditComponent from "@/components/parrains/ParrainEditComponent.vue";
 import ParrainsImportComponent from "@/components/parrains/ParrainsImportComponent.vue";
+import { useParrainsStore } from "@/store/parrains";
+import { useAuthStore } from "@/store/auth";
 
 export default {
   components: {
@@ -95,11 +97,11 @@ export default {
     ParrainsImportComponent,
   },
   computed: {
-    ...mapGetters({
-      parrains: "parrains/parrains",
+    ...mapState(useParrainsStore, {
+      parrains: "parrains",
     }),
-    ...mapState({
-      user: (state) => state.authentication.user,
+    ...mapState(useAuthStore, {
+      user: (state: any) => state.user,
     }),
   },
 };

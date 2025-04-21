@@ -10,9 +10,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addManagerModalLabel">
-            Ajouter un manager
-          </h5>
+          <h5 class="modal-title" id="addManagerModalLabel">Ajouter un manager</h5>
           <button
             type="button"
             class="btn-close"
@@ -78,8 +76,7 @@
                 type="password"
                 v-bind:class="{
                   'form-control': true,
-                  'is-valid':
-                    passwordConfirmation && password === passwordConfirmation,
+                  'is-valid': passwordConfirmation && password === passwordConfirmation,
                 }"
                 class="form-control"
                 placeholder="Confirmation du mot de passe"
@@ -96,19 +93,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Fermer
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            :disabled="!isValid"
-            @click="submit"
-          >
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-primary" :disabled="!isValid" @click="submit">
             Ajouter
           </button>
         </div>
@@ -117,27 +103,25 @@
   </div>
 </template>
 
-<script>
-import PasswordValidationComponent from "@/components/PasswordValidationComponent.vue";
-import {Modal} from "bootstrap";
+<script lang="ts">
+import { Modal } from 'bootstrap'
+import PasswordValidationComponent from '@/components/PasswordValidationComponent.vue'
+import { useManagersStore } from '@/store/managers.js'
 
 export default {
   components: { PasswordValidationComponent },
   methods: {
     submit() {
-      this.$store
-        .dispatch("managers/add", {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-        })
+      useManagersStore()
+        .add(this.name, this.email, this.password)
         .then(() => {
-          const modal = Modal.getOrCreateInstance(this.$refs.modal);
-          modal.hide();
+          let modalElm: any = this.$refs.modal
+          const modal = Modal.getOrCreateInstance(modalElm)
+          modal.hide()
         })
-        .catch((error) => {
-          this.errors = error.response.data.errors;
-        });
+        .catch((error: any) => {
+          this.errors = error.response.data.errors
+        })
     },
   },
   computed: {
@@ -148,19 +132,19 @@ export default {
         this.password &&
         this.passwordValid &&
         this.password === this.passwordConfirmation
-      );
+      )
     },
   },
   data() {
     return {
-      name: "",
-      email: "",
-      password: "",
-      passwordConfirmation: "",
+      name: '',
+      email: '',
+      password: '',
+      passwordConfirmation: '',
       passwordValid: false,
-      errors: [],
-    };
+      errors: [] as any,
+    }
   },
-  name: "ManagerAddComponent",
-};
+  name: 'ManagerAddComponent',
+}
 </script>

@@ -1,21 +1,22 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
 
-import "bootstrap";
-import axios from "axios";
-import store from "./store";
+import 'bootstrap'
+import axios from 'axios'
 
-import "./assets/app.scss";
+import './assets/app.scss'
 
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
-axios.defaults.headers.common["Accept"] = "application/json";
+axios.defaults.withCredentials = true
+axios.defaults.withXSRFToken = true
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
+axios.defaults.headers.common['Accept'] = 'application/json'
 
-const app = createApp(App);
+const pinia = createPinia()
+const app = createApp(App)
 
-app.use(router);
-app.use(store);
+app.use(pinia)
+app.use(router)
 
-app.mount("#app");
+app.mount('#app')

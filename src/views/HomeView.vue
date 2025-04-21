@@ -121,33 +121,41 @@
   </div>
 </template>
 
-<script>
-import { mapGetters, mapState } from "vuex";
+<script lang="ts">
+import { mapState } from 'pinia'
+import { useAuthStore } from '@/store/auth.ts'
+import { useFilleulsStore } from '@/store/fieuls.ts'
+import { useManagersStore } from '@/store/managers.ts'
+import { useParrainsStore } from '@/store/parrains.ts'
 
 export default {
   computed: {
     parrainageRatio() {
-      let total = this.filleuls.filter((filleul) => {
-        return !filleul.absent || !!filleul.parrain_id;
-      }).length;
+      let total = this.filleuls.filter((filleul: any) => {
+        return !filleul.absent || !!filleul.parrain_id
+      }).length
       if (total === 0) {
-        return 0;
+        return 0
       }
 
-      let value = this.filleuls.filter((filleul) => {
-        return !!filleul.parrain_id;
-      }).length;
+      let value = this.filleuls.filter((filleul: any) => {
+        return !!filleul.parrain_id
+      }).length
 
-      return Math.round((value / total) * 100);
+      return Math.round((value / total) * 100)
     },
-    ...mapGetters({
-      filleuls: "filleuls/filleuls",
-      managers: "managers/managers",
-      parrains: "parrains/parrains",
+    ...mapState(useAuthStore, {
+      user: (state) => state.user,
     }),
-    ...mapState({
-      user: (state) => state.authentication.user,
+    ...mapState(useFilleulsStore, {
+      filleuls: (state) => state.filleuls,
+    }),
+    ...mapState(useManagersStore, {
+      managers: (state) => state.managers,
+    }),
+    ...mapState(useParrainsStore, {
+      parrains: (state) => state.parrains,
     }),
   },
-};
+}
 </script>

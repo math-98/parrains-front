@@ -2,19 +2,24 @@
   <RouterView />
 </template>
 
-<script>
+<script lang="ts">
+import { useAuthStore } from "@/store/auth.js";
+import { useManagersStore } from "@/store/managers.js";
+import { useParrainsStore } from "@/store/parrains.js";
+import { useFilleulsStore } from "@/store/fieuls.js";
+
 export default {
   mounted() {
-    this.$store
-      .dispatch("fetchUser")
+    useAuthStore()
+      .fetchUser()
       .then(() => {
-        this.$store.dispatch("managers/fetch");
+        useManagersStore().fetch();
       })
       .catch(() => {
-        this.$store.dispatch("init");
+        useAuthStore().init();
       });
-    this.$store.dispatch("parrains/fetch");
-    this.$store.dispatch("filleuls/fetch");
+    useParrainsStore().fetch();
+    useFilleulsStore().fetch();
   },
 };
 </script>

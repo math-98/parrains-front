@@ -23,32 +23,15 @@
         <div class="modal-body">
           <label class="form-label">Parrain</label>
           <select class="form-select" v-model="parrain_id">
-            <option value="" v-if="!filleul.parrain_id">
-              Sélectionner un parrain
-            </option>
-            <option
-              v-for="parrain of parrains"
-              :value="parrain.id"
-              :key="parrain.id"
-            >
+            <option value="" v-if="!filleul.parrain_id">Sélectionner un parrain</option>
+            <option v-for="parrain of parrains" :value="parrain.id" :key="parrain.id">
               {{ parrain.firstname }} {{ parrain.lastname }}
             </option>
           </select>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Fermer
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            :disabled="!parrain_id"
-            @click="submit"
-          >
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-primary" :disabled="!parrain_id" @click="submit">
             Envoyer
           </button>
         </div>
@@ -57,49 +40,52 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from "vuex";
-import { Modal } from "bootstrap";
+<script lang="ts">
+import { mapGetters, mapState } from 'pinia'
+import { Modal } from 'bootstrap'
+import { useFilleulsStore } from '@/store/fieuls.js'
+import { useParrainsStore } from '@/store/parrains.js'
 
 export default {
   mounted() {
-    this.modal = new Modal(this.$refs.modal);
-    this.parrain_id = this.filleul.parrain_id ?? "";
+    let modalElm: any = this.$refs.modal
+    this.modal = new Modal(modalElm)
+    this.parrain_id = this.filleul.parrain_id ?? ''
   },
   unmounted() {
-    this.modal.hide();
+    this.modal.hide()
   },
   methods: {
     submit() {
-      this.$store
-        .dispatch("filleuls/edit", {
+      useFilleulsStore()
+        .edit({
           id: this.filleul.id,
           parrain_id: this.parrain_id,
         })
         .then(() => {
-          this.modal.hide();
-        });
+          this.modal.hide()
+        })
     },
   },
   computed: {
-    ...mapGetters({
-      parrains: "parrains/parrains",
+    ...mapState(useParrainsStore, {
+      parrains: 'parrains',
     }),
   },
   data() {
     return {
-      modal: undefined,
-      parrain_id: undefined,
-    };
+      modal: undefined as any,
+      parrain_id: undefined as any,
+    }
   },
-  name: "AssignComponent",
+  name: 'AssignComponent',
   props: {
     filleul: {
       type: Object,
       required: true,
     },
   },
-};
+}
 </script>
 
 <style scoped></style>

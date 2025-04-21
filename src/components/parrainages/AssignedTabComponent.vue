@@ -9,9 +9,7 @@
     </thead>
     <tbody>
       <tr v-for="parrainage of parrainages" :key="parrainage.filleul.id">
-        <td>
-          {{ parrainage.filleul.firstname }} {{ parrainage.filleul.lastname }}
-        </td>
+        <td>{{ parrainage.filleul.firstname }} {{ parrainage.filleul.lastname }}</td>
         <td>
           <template v-if="parrainage.parrain">
             {{ parrainage.parrain.firstname }} {{ parrainage.parrain.lastname }}
@@ -33,36 +31,39 @@
   </table>
 </template>
 
-<script>
-import { mapState } from "vuex";
-import AssignComponent from "@/components/parrainages/AssignComponent.vue";
+<script lang="ts">
+import { mapState } from 'pinia'
+import AssignComponent from '@/components/parrainages/AssignComponent.vue'
+import { useAuthStore } from '@/store/auth.js'
+import { useFilleulsStore } from '@/store/fieuls.js'
+import { useParrainsStore } from '@/store/parrains.js'
 
 export default {
   components: { AssignComponent },
   computed: {
     parrainages() {
-      const parrains = this.$store.getters["parrains/parrains"];
+      const parrains = useParrainsStore().parrains
 
-      return this.$store.getters["filleuls/filleuls"]
-        .filter((filleul) => {
-          return !!filleul.parrain_id;
+      return useFilleulsStore()
+        .filleuls.filter((filleul: any) => {
+          return !!filleul.parrain_id
         })
-        .map((filleul) => {
-          const parrain = parrains.find((parrain) => {
-            return parrain.id === filleul.parrain_id;
-          });
+        .map((filleul: any) => {
+          const parrain = parrains.find((parrain: any) => {
+            return parrain.id === filleul.parrain_id
+          })
           return {
             filleul: filleul,
             parrain: parrain,
-          };
-        });
+          }
+        })
     },
-    ...mapState({
-      user: (state) => state.authentication.user,
+    ...mapState(useAuthStore, {
+      user: (state) => state.user,
     }),
   },
-  name: "AssignedTabComponent",
-};
+  name: 'AssignedTabComponent',
+}
 </script>
 
 <style scoped></style>

@@ -67,23 +67,24 @@
   </div>
 </template>
 
-<script>
-import { mapState } from "vuex";
-import AssignedTabComponent from "@/components/parrainages/AssignedTabComponent.vue";
-import UnassignedTabComponent from "@/components/parrainages/UnassignedTabComponent.vue";
+<script lang="ts">
+import { mapState } from 'pinia'
+import AssignedTabComponent from '@/components/parrainages/AssignedTabComponent.vue'
+import UnassignedTabComponent from '@/components/parrainages/UnassignedTabComponent.vue'
+import { useAuthStore } from '@/store/auth.ts'
 
 export default {
   computed: {
     pdfUrl() {
-      return `${import.meta.env.VITE_API_URL}/export/pdf`;
+      return `${import.meta.env.VITE_API_URL}/export/pdf`
     },
-    ...mapState({
-      user: (state) => state.authentication.user,
+    ...mapState(useAuthStore, {
+      user: (state) => state.user,
     }),
   },
-  name: "ParrainagesView",
+  name: 'ParrainagesView',
   components: { AssignedTabComponent, UnassignedTabComponent },
-};
+}
 </script>
 
 <style scoped>
